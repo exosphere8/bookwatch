@@ -1,24 +1,80 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "bookwatch"
-version = "1.0.0"
-description = "Scrape product listings, track price history in SQLite, detect price changes."
+version = "2.0.0"
+description = "Polite price-tracking scraper: full price history in SQLite, change detection and alerts."
 readme = "README.md"
-requires-python = ">=3.9"
-license = { text = "MIT" }
-dependencies = ["requests>=2.31", "beautifulsoup4>=4.12"]
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "exosphere8" }]
+keywords = ["web-scraping", "price-tracking", "sqlite", "data-pipeline", "beautifulsoup"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+    "Typing :: Typed",
+]
+dependencies = [
+    "requests>=2.31",
+    "beautifulsoup4>=4.12",
+]
 
 [project.optional-dependencies]
-dev = ["pytest>=8"]
+dev = [
+    "pytest>=8",
+    "pytest-cov>=5",
+    "ruff>=0.6",
+    "mypy>=1.11",
+    "types-requests",
+]
 
 [project.scripts]
 bookwatch = "bookwatch.cli:main"
 
+[project.urls]
+Homepage = "https://github.com/exosphere8/bookwatch"
+Issues = "https://github.com/exosphere8/bookwatch/issues"
+Changelog = "https://github.com/exosphere8/bookwatch/blob/main/CHANGELOG.md"
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+bookwatch = ["py.typed"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+addopts = "--strict-markers"
+
+[tool.coverage.run]
+source = ["bookwatch"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+fail_under = 90
+exclude_also = ["if __name__ == .__main__.:", "raise AssertionError"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF", "PT", "RET", "C4"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+files = ["src"]

@@ -1,3 +1,3 @@
-"""BookWatch: scrape product listings, store price history, detect price changes."""
+"""BookWatch: polite price tracking with full history, change detection and alerts."""
 
-__version__ = "1.0.0"
+__version__ = "2.0.0"
