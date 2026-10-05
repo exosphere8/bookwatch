@@ -1,0 +1,73 @@
+# Twice-weekly live run against books.toscrape.com (a sandbox site built for scraping practice).
+# It proves the scraper still matches the real markup, keeps a price history across runs
+# via the Actions cache, and publishes the change report to the run summary.
+# Nothing is committed back to the repository.
+name: Live scrape
+
+on:
+  schedule:
+    # Mondays and Thursdays: GitHub evicts caches unused for 7 days, so the history cache is
+    # always read again well within that window.
+    - cron: "23 5 * * 1,4"
+  workflow_dispatch:
+    inputs:
+      pages:
+        description: "Pages to crawl (0 = whole catalogue)"
+        default: "0"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: live-scrape
+  cancel-in-progress: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      BOOKWATCH_DB: data/bookwatch.db
+      PYTHONIOENCODING: utf-8
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: pip install .
+
+      - name: Restore price history
+        uses: actions/cache@v6
+        with:
+          path: data/
+          key: bookwatch-db-${{ github.run_id }}
+          restore-keys: bookwatch-db-
+
+      - name: Scrape
+        run: |
+          mkdir -p data
+          bookwatch -v scrape --pages "${{ inputs.pages || '0' }}"
+
+      - name: Publish report
+        if: always()
+        run: |
+          {
+            echo "## BookWatch live run"
+            echo '```'
+            bookwatch runs --limit 5
+            echo
+            bookwatch changes
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          bookwatch changes --json > data/changes.json
+          bookwatch export --format csv --out data/latest.csv
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: bookwatch-report
+          path: |
+            data/changes.json
+            data/latest.csv
+          retention-days: 30
