@@ -208,6 +208,9 @@ tests/          fake HTTP transport + fake clock: no network, no sleeps
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) and the [changelog](CHANGELOG.md).
 
+**Post-mortem:** [The partial crawl that hid a price drop](https://github.com/exosphere8/postmortems/blob/main/the-partial-crawl-that-hid-a-price-drop.md)
+explains why each product is compared with its own last sighting rather than with the previous run.
+
 ## License
 
 [MIT](LICENSE)
