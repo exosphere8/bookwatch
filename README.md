@@ -64,7 +64,7 @@ low £40.00  high £51.77  now £40.00
   and a failed migration leaves the file untouched.
 - **Alerts.** `--notify` posts changes to a Slack or Discord webhook, or as raw JSON.
 - **Scriptable.** JSON output for `changes` and `history`, CSV/JSON export, meaningful exit codes.
-- **Engineered.** `mypy --strict`, ruff, 129 offline tests (fake HTTP transport and fake clock:
+- **Engineered.** `mypy --strict`, ruff, 130 offline tests (fake HTTP transport and fake clock:
   no network, no sleeping, and a guard that fails any test touching the real network), a 90%
   coverage gate, and CI on Linux, Windows and macOS.
 
@@ -187,7 +187,7 @@ Check the site's terms of service and `robots.txt` first. BookWatch will refuse 
 
 ```bash
 pip install -e ".[dev]"
-pytest -W error --cov          # 129 offline tests, coverage gate 90%
+pytest -W error --cov          # 130 offline tests, coverage gate 90%
 ruff check src tests && ruff format --check src tests
 mypy                           # strict
 ```

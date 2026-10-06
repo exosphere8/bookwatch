@@ -218,3 +218,13 @@ def test_redirected_output_never_fails_on_encoding(tmp_path):
     text = proc.stdout.decode("utf-8")
     assert "Café ☕" in text
     assert "█" in text or "▁" in text
+
+
+def test_non_console_streams_are_switched_to_utf8(monkeypatch):
+    import io
+    import sys
+
+    fake = io.TextIOWrapper(io.BytesIO(), encoding="cp1252")
+    monkeypatch.setattr(sys, "stdout", fake)
+    cli._configure_streams()
+    assert fake.encoding == "utf-8"

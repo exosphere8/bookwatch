@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "bookwatch"
-version = "2.0.0"
+version = "2.0.1"
 description = "Polite price-tracking scraper: full price history in SQLite, change detection and alerts."
 readme = "README.md"
 requires-python = ">=3.10"

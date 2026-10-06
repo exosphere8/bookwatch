@@ -4,6 +4,13 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [2.0.1] - 2026-10-06
+
+### Fixed
+- Output redirected to `NUL` on Windows could fail on non-ASCII characters: the NUL device
+  claims to be a terminal, so it was treated as an interactive console. Only a real Windows
+  console now keeps the console encoding; everything else gets UTF-8.
+
 ## [2.0.0] - 2026-10-05
 
 ### Added
@@ -42,5 +49,6 @@ All notable changes to this project are documented here. The format follows
 ### Added
 - Initial release: paginated scraper, SQLite price snapshots, change report, CSV/JSON export.
 
+[2.0.1]: https://github.com/exosphere8/bookwatch/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/exosphere8/bookwatch/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/exosphere8/bookwatch/releases/tag/v1.0.0

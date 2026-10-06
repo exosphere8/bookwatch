@@ -262,17 +262,25 @@ def build_parser() -> argparse.ArgumentParser:
     return p
 
 
+def _is_console(stream: io.TextIOWrapper) -> bool:
+    """A real interactive console. On Windows the NUL device also claims to be a TTY."""
+    if sys.platform == "win32":
+        raw = getattr(stream.buffer, "raw", None)
+        return type(raw).__name__ == "_WindowsConsoleIO"
+    return stream.isatty()
+
+
 def _configure_streams() -> None:
     """Never crash on output encoding.
 
     Redirected output on Windows defaults to the ANSI code page, which cannot encode the
-    sparkline or many titles: write UTF-8 to files and pipes, and replace unencodable
+    sparkline or many titles: write UTF-8 to files, pipes and NUL, and replace unencodable
     characters on interactive consoles.
     """
     for stream in (sys.stdout, sys.stderr):
         if not isinstance(stream, io.TextIOWrapper):
             continue
-        if stream.isatty():
+        if _is_console(stream):
             stream.reconfigure(errors="replace")
         else:
             stream.reconfigure(encoding="utf-8")
