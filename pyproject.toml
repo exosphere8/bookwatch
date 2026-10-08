@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
 license-files = ["LICENSE"]
-authors = [{ name = "exosphere8" }]
+authors = [{ name = "Midnight Croissant" }]
 keywords = ["web-scraping", "price-tracking", "sqlite", "data-pipeline", "beautifulsoup"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
